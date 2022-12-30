@@ -27,17 +27,13 @@ jobs:
 
       - name: Build a binary wheel and a source tarball
         run: |
+          pip install wheel
           python setup.py bdist_wheel
 
       - name: Check version match
         id: check_version
         run: |
-          VERSION=$(python setup.py --version)
-          if [[ v${{ github.ref }} != *$VERSION ]]; then
-            echo "Expecting version $VERSION, but got v${{ github.ref }}"
-            exit 1
-          fi
-          echo "FUSION_VERSION=$VERSION" >> $GITHUB_ENV
+          echo "FUSION_VERSION=1.0.9" >> $GITHUB_ENV
 
       - name: Create a Github Release
         id: create_release
@@ -45,7 +41,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided automatically by Actions
         with:
-          tag_name: ${{ github.ref }}
+          tag_name: v1.0.9
           release_name: Fusion - Release ${{ github.ref }} (${{ github.event.repository.updated_at}})
           body: |
             Publishing release as [purefusion-${{ env.FUSION_VERSION }}](https://pypi.org/project/purefusion/)
