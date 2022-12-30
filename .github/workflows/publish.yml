@@ -27,7 +27,7 @@ jobs:
 
       - name: Build a binary wheel and a source tarball
         run: |
-          python setup.py sdist bdist
+          python setup.py bdist_wheel
 
       - name: Check version match
         id: check_version
@@ -38,11 +38,6 @@ jobs:
             exit 1
           fi
           echo "FUSION_VERSION=$VERSION" >> $GITHUB_ENV
-
-      - name: Publish distribution 📦 to PyPI
-        uses: pypa/gh-action-pypi-publish@release/v1
-        with:
-          password: ${{ secrets.PYPI_API_TOKEN }}
 
       - name: Create a Github Release
         id: create_release
